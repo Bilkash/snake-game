@@ -1,0 +1,59 @@
+.background {
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playArea {
+  border: 3px solid #008000;
+  width: 75vw;
+  height: 90vh;
+  color: #008000;
+}
+
+.scoreBox {
+  padding: 20px;
+  color: #008000;
+  top: 25%;
+  position: absolute;
+  width: 30vw;
+  height: 50vh;
+  border: 3px solid #008000;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px
+}
+
+.startButton {
+  position: absolute;
+  color: #008000;
+  top: 25%;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.tryAgainButton {
+  color: #008000;
+  top: 25%;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.playAreaWrapper {
+  display: flex;
+  gap: 25px
+}
+
+.score {
+  width: 20vw;
+  color: #008000;
+}
