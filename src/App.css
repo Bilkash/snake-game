@@ -32,14 +32,12 @@
 .startButton {
   position: absolute;
   color: #008000;
-  top: 25%;
   font-size: 24px;
   cursor: pointer;
 }
 
 .tryAgainButton {
   color: #008000;
-  top: 25%;
   font-size: 24px;
   cursor: pointer;
 }
@@ -56,4 +54,28 @@
 .score {
   width: 20vw;
   color: #008000;
+}
+
+.startMenu {
+  position: absolute;
+  width: 25%;
+  left: 42%;
+  top: 25%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px
+}
+
+.difficultItem {
+  color: #008000;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.difficultTitle {
+  color: #008000;
+  font-size: 24px;
+  margin-top: 50px;
 }

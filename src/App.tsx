@@ -2,11 +2,16 @@ import React, {useEffect, useRef, useState} from 'react';
 import AppleImg from "./assets/apple.png";
 import './App.css';
 import {useInterval} from "./hooks/useInterval";
+import {DifficultType} from "./types";
 
 const initSnake = [[4, 10], [4,10]]
 const initApple = [14, 10]
 const scale = 50
-const timeDelay = 100
+const timeDelay = {
+  easy: 300,
+  medium: 200,
+  hard: 100
+}
 
 function App() {
   const playAreaRef = useRef<HTMLCanvasElement | null>(null);
@@ -18,6 +23,7 @@ function App() {
   const [score, setScore] = useState(0);
   const [canvasY, setCanvasY] = useState<number | null>(null);
   const [canvasX, setCanvasX] = useState<number | null>(null);
+  const [difficult, setDifficult] = useState<keyof DifficultType>("easy");
 
   useInterval(() => runGame(), delay);
 
@@ -25,7 +31,7 @@ function App() {
     setSnake(initSnake)
     setApple(initApple)
     setDirection([ 1, 0 ])
-    setDelay(timeDelay)
+    setDelay(timeDelay[difficult])
     setScore(0)
     setGameOver(false)
   }
@@ -100,16 +106,20 @@ function App() {
   function changeDirection (e: React.KeyboardEvent<HTMLDivElement>) {
     switch (e.key) {
       case "ArrowLeft":
-        setDirection([-1, 0]);
+        if (direction[0] !== 1)
+          setDirection([-1, 0]);
         break;
       case "ArrowRight":
-        setDirection([1, 0]);
+        if (direction[0] !== -1)
+          setDirection([1, 0]);
         break;
       case "ArrowUp":
-        setDirection([0, -1]);
+        if (direction[1] !== 1)
+          setDirection([0, -1]);
         break;
       case "ArrowDown":
-        setDirection([0, 1]);
+        if (direction[1] !== -1)
+          setDirection([0, 1]);
         break;
     }
   }
@@ -137,7 +147,31 @@ function App() {
       )
     } else {
       return (
-        <div className="startButton" onClick={() => start()}>Start Game</div>
+        <div className={"startMenu"}>
+          <div className="startButton" onClick={() => start()}>Start Game</div>
+          <div className={"difficultTitle"}>Choose difficult:</div>
+          <div
+            className={"difficultItem"}
+            onClick={() => setDifficult("easy")}
+          >
+            {difficult === "easy" ? <img src={AppleImg} alt={"apple"} width={20}/> : null}
+            Easy
+          </div>
+          <div
+            className={"difficultItem"}
+            onClick={() => setDifficult("medium")}
+          >
+            {difficult === "medium" ? <img src={AppleImg} alt={"apple"} width={20}/> : null}
+            Medium
+          </div>
+          <div
+            className={"difficultItem"}
+            onClick={() => setDifficult("hard")}
+          >
+            {difficult === "hard" ? <img src={AppleImg} alt={"apple"} width={20}/> : null}
+            Hard
+          </div>
+        </div>
       )
     }
   }
@@ -160,13 +194,23 @@ function App() {
         ctx.setTransform(scale, 0, 0, scale, 0, 0);
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         ctx.fillStyle = "#008000";
-        snake.forEach(([x, y]) => ctx.fillRect(x, y, 1, 1));
+        snake.forEach(([x, y], index) => {
+          if (index === 0) {
+            ctx.fillStyle = "#00FF00";
+            ctx.fillRect(x, y, 1, 1);
+            ctx.fillStyle = "#008000";
+          } else if (index === snake.length - 1) {
+            ctx.fillStyle = "#004400";
+            ctx.fillRect(x, y, 1, 1);
+            ctx.fillStyle = "#008000";
+          } else {
+            ctx.fillRect(x, y, 1, 1);
+          }
+        });
         ctx.drawImage(treat, apple[0], apple[1], 1, 1);
       }
     }
   }, [snake, apple, gameOver])
-
-  console.log({canvasY, canvasX})
 
   return (
     <div
@@ -189,7 +233,7 @@ function App() {
               <div>
                   <h2>High Score: {Number(localStorage.getItem("snakeScore"))}</h2>
               </div>
-              <div className="tryAgainButton" onClick={() => start()}>
+              <div className="tryAgainButton" onClick={() => setGameOver(false)}>
                   Try Again
               </div>
           </div>
